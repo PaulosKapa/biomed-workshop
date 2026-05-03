@@ -1,0 +1,1010 @@
+[
+    {
+        "id": "65ac490cb01f77c7",
+        "type": "tab",
+        "label": "Flow 1",
+        "disabled": false,
+        "info": "",
+        "env": []
+    },
+    {
+        "id": "63099ebd76b1b8bf",
+        "type": "mqtt-broker",
+        "name": "",
+        "broker": "localhost",
+        "port": 1883,
+        "clientid": "",
+        "autoConnect": true,
+        "usetls": false,
+        "protocolVersion": 4,
+        "keepalive": 60,
+        "cleansession": true,
+        "autoUnsubscribe": true,
+        "birthTopic": "",
+        "birthQos": "0",
+        "birthRetain": "false",
+        "birthPayload": "",
+        "birthMsg": {},
+        "closeTopic": "",
+        "closeQos": "0",
+        "closeRetain": "false",
+        "closePayload": "",
+        "closeMsg": {},
+        "willTopic": "",
+        "willQos": "0",
+        "willRetain": "false",
+        "willPayload": "",
+        "willMsg": {},
+        "userProps": "",
+        "sessionExpiry": ""
+    },
+    {
+        "id": "e744df281d73d933",
+        "type": "ui-base",
+        "name": "My Dashboard",
+        "path": "/dashboard",
+        "appIcon": "",
+        "includeClientData": true,
+        "acceptsClientConfig": [
+            "ui-notification",
+            "ui-control"
+        ],
+        "showPathInSidebar": false,
+        "headerContent": "none",
+        "navigationStyle": "none",
+        "titleBarStyle": "hidden",
+        "showReconnectNotification": true,
+        "notificationDisplayTime": 1,
+        "showDisconnectNotification": true,
+        "allowInstall": false
+    },
+    {
+        "id": "75d4b5e91822bc09",
+        "type": "ui-theme",
+        "name": "Default Theme",
+        "colors": {
+            "surface": "#ffffff",
+            "primary": "#0094CE",
+            "bgPage": "#eeeeee",
+            "groupBg": "#ffffff",
+            "groupOutline": "#cccccc"
+        },
+        "sizes": {
+            "density": "default",
+            "pagePadding": "12px",
+            "groupGap": "12px",
+            "groupBorderRadius": "4px",
+            "widgetGap": "12px"
+        }
+    },
+    {
+        "id": "ad68a2ca9d0265c8",
+        "type": "ui-page",
+        "name": "Page 1",
+        "ui": "e744df281d73d933",
+        "path": "/page1",
+        "icon": "home",
+        "layout": "grid",
+        "theme": "75d4b5e91822bc09",
+        "breakpoints": [
+            {
+                "name": "Default",
+                "px": "0",
+                "cols": "3"
+            },
+            {
+                "name": "Tablet",
+                "px": "576",
+                "cols": "6"
+            },
+            {
+                "name": "Small Desktop",
+                "px": "768",
+                "cols": "9"
+            },
+            {
+                "name": "Desktop",
+                "px": "1024",
+                "cols": "12"
+            }
+        ],
+        "order": 1,
+        "className": "",
+        "visible": true,
+        "disabled": false
+    },
+    {
+        "id": "a1dccc5cfa515560",
+        "type": "ui-group",
+        "name": "Patients",
+        "page": "ad68a2ca9d0265c8",
+        "width": "12",
+        "height": "1",
+        "order": 1,
+        "showTitle": false,
+        "className": "",
+        "visible": "true",
+        "disabled": "false",
+        "groupType": "default"
+    },
+    {
+        "id": "011b9102b381d29e",
+        "type": "mqtt in",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "topic": "monitor/sensor1",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "63099ebd76b1b8bf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 300,
+        "y": 80,
+        "wires": [
+            [
+                "2db56e295922a9ce",
+                "bc7aba481ea4386d",
+                "14baf9492918f324"
+            ]
+        ]
+    },
+    {
+        "id": "17be64e182f4e13a",
+        "type": "ui-text",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "order": 1,
+        "width": "6",
+        "height": "2",
+        "name": "Patient 1",
+        "label": "Patient 1",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 840,
+        "y": 20,
+        "wires": []
+    },
+    {
+        "id": "2db56e295922a9ce",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 580,
+        "y": 20,
+        "wires": [
+            [
+                "17be64e182f4e13a"
+            ]
+        ]
+    },
+    {
+        "id": "bc7aba481ea4386d",
+        "type": "ui-chart",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "name": "",
+        "label": "Patient 1 temperature",
+        "order": 3,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "removeOlderPoints": "",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "linear",
+        "x": 600,
+        "y": 220,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "14baf9492918f324",
+        "type": "switch",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "36",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "38",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 390,
+        "y": 240,
+        "wires": [
+            [
+                "b74247bb56fcb472"
+            ],
+            [
+                "b74247bb56fcb472"
+            ]
+        ]
+    },
+    {
+        "id": "5562677f1796832b",
+        "type": "ui-notification",
+        "z": "65ac490cb01f77c7",
+        "ui": "e744df281d73d933",
+        "position": "top left",
+        "colorDefault": false,
+        "color": "#cc0000",
+        "displayTime": "20",
+        "showCountdown": true,
+        "outputs": 1,
+        "allowDismiss": true,
+        "dismissText": "Close",
+        "allowConfirm": false,
+        "confirmText": "Confirm",
+        "raw": false,
+        "className": "",
+        "name": "",
+        "x": 740,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "b74247bb56fcb472",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"Patient 1 temperature is abnormal! \" & $string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 560,
+        "y": 280,
+        "wires": [
+            [
+                "5562677f1796832b"
+            ]
+        ]
+    },
+    {
+        "id": "58065ae70c560323",
+        "type": "mqtt in",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "topic": "monitor/sensor2",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "63099ebd76b1b8bf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 260,
+        "y": 520,
+        "wires": [
+            [
+                "ca7b9e685f9c0ec0",
+                "d055b1bff6204fe0",
+                "87179b45e6a31912"
+            ]
+        ]
+    },
+    {
+        "id": "a97e38a6cc9e5b39",
+        "type": "ui-text",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "order": 2,
+        "width": "6",
+        "height": "2",
+        "name": "Patient 2",
+        "label": "Patient 2",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 800,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "ca7b9e685f9c0ec0",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 540,
+        "y": 460,
+        "wires": [
+            [
+                "a97e38a6cc9e5b39"
+            ]
+        ]
+    },
+    {
+        "id": "d055b1bff6204fe0",
+        "type": "ui-chart",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "name": "",
+        "label": "Patient 2 Temperature",
+        "order": 4,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": false,
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "removeOlderPoints": "",
+        "colors": [
+            "#1a5fb4",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#c061cb",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "linear",
+        "x": 560,
+        "y": 660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "87179b45e6a31912",
+        "type": "switch",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "36",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "38",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 350,
+        "y": 680,
+        "wires": [
+            [
+                "dead3316fb189542"
+            ],
+            [
+                "dead3316fb189542"
+            ]
+        ]
+    },
+    {
+        "id": "c74070a8a2af2e99",
+        "type": "ui-notification",
+        "z": "65ac490cb01f77c7",
+        "ui": "e744df281d73d933",
+        "position": "top left",
+        "colorDefault": false,
+        "color": "#cc0000",
+        "displayTime": "20",
+        "showCountdown": true,
+        "outputs": 1,
+        "allowDismiss": true,
+        "dismissText": "Close",
+        "allowConfirm": false,
+        "confirmText": "Confirm",
+        "raw": false,
+        "className": "",
+        "name": "",
+        "x": 700,
+        "y": 760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "dead3316fb189542",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"Patient 1 temperature is abnormal! \" & $string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 720,
+        "wires": [
+            [
+                "c74070a8a2af2e99"
+            ]
+        ]
+    },
+    {
+        "id": "51e432d4f8dcbf3c",
+        "type": "mqtt in",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "topic": "monitor/sensor3",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "63099ebd76b1b8bf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 240,
+        "y": 1020,
+        "wires": [
+            [
+                "f0eadf954cefc02b",
+                "a853e3104a577da3",
+                "cc04e317a15e0e0a"
+            ]
+        ]
+    },
+    {
+        "id": "cc976255e7568dee",
+        "type": "ui-text",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "order": 5,
+        "width": "6",
+        "height": "2",
+        "name": "Patient 3",
+        "label": "Patient 3",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 780,
+        "y": 960,
+        "wires": []
+    },
+    {
+        "id": "f0eadf954cefc02b",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 520,
+        "y": 960,
+        "wires": [
+            [
+                "cc976255e7568dee"
+            ]
+        ]
+    },
+    {
+        "id": "a853e3104a577da3",
+        "type": "ui-chart",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "name": "",
+        "label": "Patient 3 temperature",
+        "order": 7,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "removeOlderPoints": "",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#613583",
+            "#d62728",
+            "#ff9896",
+            "#9467bd",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "linear",
+        "x": 540,
+        "y": 1160,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "cc04e317a15e0e0a",
+        "type": "switch",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "36",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "38",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 330,
+        "y": 1180,
+        "wires": [
+            [
+                "534b80431efb12bb"
+            ],
+            [
+                "534b80431efb12bb"
+            ]
+        ]
+    },
+    {
+        "id": "4ea68a309b5728c9",
+        "type": "ui-notification",
+        "z": "65ac490cb01f77c7",
+        "ui": "e744df281d73d933",
+        "position": "bottom right",
+        "colorDefault": false,
+        "color": "#cc0000",
+        "displayTime": "20",
+        "showCountdown": true,
+        "outputs": 1,
+        "allowDismiss": true,
+        "dismissText": "Close",
+        "allowConfirm": false,
+        "confirmText": "Confirm",
+        "raw": false,
+        "className": "",
+        "name": "",
+        "x": 680,
+        "y": 1260,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "534b80431efb12bb",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"Patient 1 temperature is abnormal! \" & $string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 500,
+        "y": 1220,
+        "wires": [
+            [
+                "4ea68a309b5728c9"
+            ]
+        ]
+    },
+    {
+        "id": "38dd1212f8430747",
+        "type": "mqtt in",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "topic": "monitor/sensor4",
+        "qos": "2",
+        "datatype": "auto-detect",
+        "broker": "63099ebd76b1b8bf",
+        "nl": false,
+        "rap": true,
+        "rh": 0,
+        "inputs": 0,
+        "x": 200,
+        "y": 1520,
+        "wires": [
+            [
+                "cb64fa1e33ebcdea",
+                "e48259bf5b374828",
+                "0c5c247e88c5c17d"
+            ]
+        ]
+    },
+    {
+        "id": "5f22b5a3b9a3bf13",
+        "type": "ui-text",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "order": 6,
+        "width": "6",
+        "height": "2",
+        "name": "Patient 4",
+        "label": "Patient 4",
+        "format": "{{msg.payload}}",
+        "layout": "col-center",
+        "style": false,
+        "font": "",
+        "fontSize": 16,
+        "color": "#717171",
+        "wrapText": false,
+        "className": "",
+        "value": "payload",
+        "valueType": "msg",
+        "x": 740,
+        "y": 1460,
+        "wires": []
+    },
+    {
+        "id": "cb64fa1e33ebcdea",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "$string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 480,
+        "y": 1460,
+        "wires": [
+            [
+                "5f22b5a3b9a3bf13"
+            ]
+        ]
+    },
+    {
+        "id": "e48259bf5b374828",
+        "type": "ui-chart",
+        "z": "65ac490cb01f77c7",
+        "group": "a1dccc5cfa515560",
+        "name": "",
+        "label": "Patient 4 temperature",
+        "order": 8,
+        "chartType": "line",
+        "category": "topic",
+        "categoryType": "msg",
+        "xAxisLabel": "",
+        "xAxisProperty": "",
+        "xAxisPropertyType": "timestamp",
+        "xAxisType": "time",
+        "xAxisFormat": "",
+        "xAxisFormatType": "auto",
+        "xmin": "",
+        "xmax": "",
+        "yAxisLabel": "",
+        "yAxisProperty": "payload",
+        "yAxisPropertyType": "msg",
+        "ymin": "",
+        "ymax": "",
+        "bins": 10,
+        "action": "append",
+        "stackSeries": false,
+        "pointShape": "circle",
+        "pointRadius": 4,
+        "showLegend": true,
+        "removeOlder": "10",
+        "removeOlderUnit": "60",
+        "removeOlderPoints": "",
+        "colors": [
+            "#0095ff",
+            "#ff0000",
+            "#ff7f0e",
+            "#2ca02c",
+            "#a347e1",
+            "#d62728",
+            "#ff9896",
+            "#c64600",
+            "#c5b0d5"
+        ],
+        "textColor": [
+            "#666666"
+        ],
+        "textColorDefault": true,
+        "gridColor": [
+            "#e5e5e5"
+        ],
+        "gridColorDefault": true,
+        "width": "6",
+        "height": "5",
+        "className": "",
+        "interpolation": "linear",
+        "x": 500,
+        "y": 1660,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0c5c247e88c5c17d",
+        "type": "switch",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "lte",
+                "v": "36",
+                "vt": "num"
+            },
+            {
+                "t": "gte",
+                "v": "38",
+                "vt": "num"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 290,
+        "y": 1680,
+        "wires": [
+            [
+                "26e5c4b5baa00516"
+            ],
+            [
+                "26e5c4b5baa00516"
+            ]
+        ]
+    },
+    {
+        "id": "d012b7682a0d8277",
+        "type": "ui-notification",
+        "z": "65ac490cb01f77c7",
+        "ui": "e744df281d73d933",
+        "position": "bottom left",
+        "colorDefault": false,
+        "color": "#cc0000",
+        "displayTime": "20",
+        "showCountdown": true,
+        "outputs": 1,
+        "allowDismiss": true,
+        "dismissText": "Close",
+        "allowConfirm": false,
+        "confirmText": "Confirm",
+        "raw": false,
+        "className": "",
+        "name": "",
+        "x": 640,
+        "y": 1760,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "26e5c4b5baa00516",
+        "type": "change",
+        "z": "65ac490cb01f77c7",
+        "name": "",
+        "rules": [
+            {
+                "t": "set",
+                "p": "payload",
+                "pt": "msg",
+                "to": "\"Patient 1 temperature is abnormal! \" & $string(payload) & \" °C\"",
+                "tot": "jsonata"
+            }
+        ],
+        "action": "",
+        "property": "",
+        "from": "",
+        "to": "",
+        "reg": false,
+        "x": 460,
+        "y": 1720,
+        "wires": [
+            [
+                "d012b7682a0d8277"
+            ]
+        ]
+    }
+]

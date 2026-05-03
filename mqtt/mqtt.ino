@@ -1,17 +1,20 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-// --- Ρυθμίσεις Δικτύου ---
-const char* ssid = "Vodafone_5G-00680";
-const char* password = "FjKdEggetXNdETk5";
-const char* mqtt_server = "192.168.2.51"; // Η IP του Raspberry Pi
-
+//όνομα και κωδικος δικτύου που θα συνδεθούμε
+const char* ssid = "AndroidAP_5216";
+const char* password = "hz99skfhup4d7s3";
+//raspberry pi ip
+const char* mqtt_server = "192.168.116.118";
+String ip_address = "";
+//εκκινηση wifi και mqtt
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 int count = 0; // Ο αριθμός που θα στέλνουμε
 
 void setup_wifi() {
+  //συνδεση στο wifi
   delay(10);
   Serial.begin(115200);
   Serial.print("\nConnecting to ");
@@ -27,16 +30,17 @@ void setup_wifi() {
   Serial.println("\nWiFi connected");
   Serial.print("IP address: ");
   Serial.println(WiFi.localIP());
+  ip_address = String(WiFi.localIP());
 }
 
 void reconnect() {
-  // Επανάληψη μέχρι να συνδεθούμε στον Broker
+  //Για την συνδεση στο mqtt
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
 
     // Δημιουργία μοναδικού ID για τον Client
-    String clientId = "ESP32Client-";
-    clientId += String(random(0xffff), HEX);
+    String clientId = "Client-";
+    clientId += String(ip_address);
 
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
@@ -51,11 +55,13 @@ void reconnect() {
 }
 
 void setup() {
+  //σύνδεση με wifi και σετάρισμα mqtt server
   setup_wifi();
   client.setServer(mqtt_server, 1883);
 }
 
 void loop() {
+  //μεχρι να υπάρξει επιτυχής σύνδεση στο mqtt
   if (!client.connected()) {
     reconnect();
   }
@@ -72,7 +78,7 @@ void loop() {
   Serial.println(msg);
 
   // Αποστολή στο Topic
-  client.publish("test/counter", msg);
+  client.publish("monitor/sensor1", msg);
 
   delay(2000); // Αναμονή 2 δευτερόλεπτα
 }
