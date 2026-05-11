@@ -1,84 +1,89 @@
 #include <WiFi.h>
 #include <PubSubClient.h>
 
-//όνομα και κωδικος δικτύου που θα συνδεθούμε
-const char* ssid = "AndroidAP_5216";
-const char* password = "hz99skfhup4d7s3";
-//raspberry pi ip
-const char* mqtt_server = "192.168.116.118";
-String ip_address = "";
-//εκκινηση wifi και mqtt
+// Pins
+int adcPin = 1;     // Το pin που διαβάζει τον τελεστικό
+int alertLED = 2;   // Το pin του LED
+
+//μεταβλητές κυκλώματος
+float Gain = 4.7;      //κέρδος αντιστάσεων (4.7k/1k)
+float Vref = 0.22;     //τάση ποτενσιόμετρου (σε Volts)
+
+// WiFi & MQTT
+const char* ssid = "wifi_name";
+const char* password = "password";
+const char* mqtt_server = "ip_address_of_raspberry_pi";
+
 WiFiClient espClient;
 PubSubClient client(espClient);
 
-int count = 0; // Ο αριθμός που θα στέλνουμε
-
 void setup_wifi() {
-  //συνδεση στο wifi
   delay(10);
   Serial.begin(115200);
-  Serial.print("\nConnecting to ");
-  Serial.println(ssid);
-
+  //σύνδεση wifi
   WiFi.begin(ssid, password);
-
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
-
   Serial.println("\nWiFi connected");
-  Serial.print("IP address: ");
-  Serial.println(WiFi.localIP());
-  ip_address = String(WiFi.localIP());
 }
-
+//σύνδεση mqtt
 void reconnect() {
-  //Για την συνδεση στο mqtt
   while (!client.connected()) {
     Serial.print("Attempting MQTT connection...");
-
-    // Δημιουργία μοναδικού ID για τον Client
-    String clientId = "Client-";
-    clientId += String(ip_address);
-
+    String clientId = "ESP32-HealthMonitor-" + String(WiFi.localIP());
     if (client.connect(clientId.c_str())) {
       Serial.println("connected");
-    } 
-    else {
-      Serial.print("failed, rc=");
-      Serial.print(client.state());
-      Serial.println(" try again in 5 seconds");
+    } else {
       delay(5000);
     }
   }
 }
 
 void setup() {
-  //σύνδεση με wifi και σετάρισμα mqtt server
+  //pin, mqtt, wifi setup 
+  pinMode(adcPin, INPUT);
+  pinMode(alertLED, OUTPUT);
   setup_wifi();
   client.setServer(mqtt_server, 1883);
 }
 
 void loop() {
-  //μεχρι να υπάρξει επιτυχής σύνδεση στο mqtt
+  //συνδεση mqtt
   if (!client.connected()) {
     reconnect();
   }
   client.loop();
 
-  // Αύξηση του αριθμού
-  count++;
+  //adc ανάγνωση
+  int rawADC = analogRead(adcPin);
 
-  // Μετατροπή του αριθμού σε String για το MQTT
+  // μετατροπή σε τάση εξόδου του ενισχυτή
+  float Vout = (rawADC * 3.3) / 4095.0;
+
+  //υπολογισμός θερμοκρασίας
+  // Vout = Gain * (V_sensor - Vref)  =>  V_sensor = (Vout/Gain) + Vref
+  float V_sensor = (Vout / Gain) + Vref;
+  float temperature = V_sensor / 0.01; // 10mV ανά βαθμό
+
+  Serial.print("Temp: ");
+  Serial.print(temperature);
+  Serial.println(" C");
+
+  //αποστολή στο nodered
   char msg[10];
-  sprintf(msg, "%d", count);
-
-  Serial.print("Publishing message: ");
-  Serial.println(msg);
-
-  // Αποστολή στο Topic
+  dtostrf(temperature, 1, 2, msg); // Μετατροπή float σε string
+  //αλλξέ το βάση που ακούει το node-red
   client.publish("monitor/sensor1", msg);
 
-  delay(2000); // Αναμονή 2 δευτερόλεπτα
+  //έλεγχος led
+  if (temperature > 38.0 || temperature < 35.0) {
+      digitalWrite(alertLED, HIGH);
+    
+  } else {
+    digitalWrite(alertLED, LOW); // Κλειστό αν όλα είναι καλά
+  }
+
+  delay(1500); // Συνολική αναμονή ανά μέτρηση
 }
